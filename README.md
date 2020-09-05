@@ -1,3 +1,3 @@
-# DG-FEM-Advection-Diffusion
+# Discontinuous Galerkin Solver
 
-A Discontinuous Galerkin solver to solve the 1D advection diffusion. Both Fortran and MATLAB version included
+1D advection diffusion DG solver. Both Fortran and MATLAB version included
