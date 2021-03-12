@@ -6,8 +6,8 @@
 close all
 clear 
 tau=2*pi();
-c = 1;          %Velocity
-alpha = 0.0001; %Diffusion coefficient
+c = 0.5;          %Velocity
+alpha = 0.05; %Diffusion coefficient
 
 %Rate params
 N=3;  % Order of spatial discretization
@@ -54,7 +54,7 @@ NodalWeights = L*BasisWeights';
 
 dT = 0.001; %time step
 saveT   = 0.01; %How often do we save the current state for plotting?
-endT    = 1.5;
+endT    = 5;
 nsaveT  = floor(saveT/dT);
 nT      = floor(endT/dT);
 saved   = zeros(N+1,K,(nT/nsaveT)+1);
@@ -71,8 +71,8 @@ for t = 1:1:nT
         hk = diff(xNode);       %Size of the element
         M = inv(L*L');          %Mass Matrix
         Dr = dLagrange(N)';     %Derivative Matrix
-        S = c*((L*L')\Dr);      %Stiffness Matrix
-        S = S - alpha*(Dr*Dr'); %Corrected stiffness matrix due to 
+        S = c*((L*L')\Dr) - alpha*(Dr'*Dr);      %Stiffness Matrix
+        %S = S - alpha*(Dr*Dr'); %Corrected stiffness matrix due to 
                                 %double derivate tem u_{xx}
         flux = zeros(N+1,1);    %Flux vector (upwind)
         dflux = zeros(N+1,1);   %Derivative flux vector (downwind)
@@ -114,7 +114,7 @@ for t = 1:1:nT
         end
         
         % NET FLUX
-        flux = flux - dflux - source_integral; 
+        flux = flux - dflux - source_integral ; 
         
         % SEMI-DISCRETE Eqns and RK4 updates
         k1(:,i) =  (2/hk(i))*(M\(S'*NodalWeights(:,i) - flux));
